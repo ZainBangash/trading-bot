@@ -1,5 +1,5 @@
 //+------------------------------------------------------------------+
-//|                                                      Phase 1.mq4 |
+//|                                                     ma cross.mq4 |
 //|                                                              ZYS |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
@@ -11,7 +11,7 @@ datetime dt;
 //+------------------------------------------------------------------+
 //| Script program start function                                    |
 //+------------------------------------------------------------------+
-int OnStart()
+int OnInit()
    {
 //---
    dt = Time [0];
@@ -25,20 +25,20 @@ void OnDeinit(const int reason){
 
 void OnTick(){
    if (isnewbar()){
-      double prev_ma10 = iMA(_Symbol, PERIOD_CURRENT, 10, 0, MODE_SMA, PRICE_CLOSE, 2);
-      double prev_ma5 = iMA(_Symbol, PERIOD_CURRENT, 5, 0, MODE_SMA, PRICE_CLOSE, 2);
-      double ma10 = iMA(_Symbol, PERIOD_CURRENT, 10, 0, MODE_SMA, PRICE_CLOSE, 1);
-      double ma5 = iMA(_Symbol, PERIOD_CURRENT, 5, 0, MODE_SMA, PRICE_CLOSE, 1);
+      double prev_ma10 = iMA(NULL, PERIOD_CURRENT, 10, 0, MODE_SMA, PRICE_CLOSE, 2);
+      double prev_ma5 = iMA(NULL, PERIOD_CURRENT, 5, 0, MODE_SMA, PRICE_CLOSE, 2);
+      double ma10 = iMA(NULL, PERIOD_CURRENT, 10, 0, MODE_SMA, PRICE_CLOSE, 1);
+      double ma5 = iMA(NULL, PERIOD_CURRENT, 5, 0, MODE_SMA, PRICE_CLOSE, 1);
       
       if(prev_ma10 > prev_ma5 && ma10 < ma5){
          if(OrdersTotal()!=0) closeexisting();
          
-         OrderSend(_Symbol, OP_BUY, 0.01, Ask, 10, 0, 0);
+         OrderSend(Symbol(), OP_BUY, 0.01, Ask, 10, 0, 0);
       }
       else if (prev_ma10 < prev_ma5 && ma10 > ma5){
          if(OrdersTotal()!=0) closeexisting();
          
-         OrderSend(_Symbol, OP_SELL, 0.01, Bid, 10, 0, 0); 
+         OrderSend(Symbol(), OP_SELL, 0.01, Bid, 10, 0, 0); 
       }
       
    }
@@ -46,7 +46,7 @@ void OnTick(){
 
 void closeexisting(){
    OrderSelect(0, SELECT_BY_POS);
-   OrderClose(OrderTicket(), OrderLots(), MarketInfo(_Symbol, MODE_BID+OrderType()), 10);
+   OrderClose(OrderTicket(), OrderLots(), MarketInfo(Symbol(), MODE_BID+OrderType()), 10);
 }
 
 bool isnewbar(){
