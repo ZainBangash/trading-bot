@@ -9,3 +9,5 @@ PULLING
 git pull
 
 PASSWORD : sachinisass101
+
+gitbash 
